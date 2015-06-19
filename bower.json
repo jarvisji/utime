@@ -1,0 +1,27 @@
+{
+  "name": "UTime",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jarvisji/utime",
+  "authors": [
+    "Jarvis Ji <jarvis.ji@outlook.com>"
+  ],
+  "description": "Record fun and life in the school.",
+  "main": "client/app.js",
+  "license": "Apache 2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/vendor",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-resource": "~1.3.15",
+    "angular-ui-tree": "~2.4.0",
+    "bootstrap-material-design": "~0.3.0"
+    "underscore": "~1.8.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.15",
+  }
+}

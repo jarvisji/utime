@@ -19,13 +19,21 @@
   "parse": {
   },
   "routes": {
+    "./middleware/wechat-public-proxy": {
+      "enabled": true,
+      "paths": "/wxproxy"
+    }
   },
   "files": {
+    "loopback#static": {
+      "params": "$!../client"
+    }
   },
   "final": {
     "loopback#urlNotFound": {}
   },
   "final:after": {
-    "errorhandler": {}
+    "errorhandler": {
+    }
   }
 }

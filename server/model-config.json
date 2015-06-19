@@ -25,5 +25,9 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "curriculum": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

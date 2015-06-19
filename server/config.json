@@ -23,5 +23,8 @@
       "disableStackTrace": false
     }
   },
-  "legacyExplorer": false
+  "legacyExplorer": false,
+  "extProtocol": "http",
+  "extHost": "{$extHost}",
+  "extPort": "{$extPort}"
 }

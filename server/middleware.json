@@ -19,6 +19,9 @@
   "parse": {
   },
   "routes": {
+    "./middleware/wechat-public": {
+      "path": "/wxproxy"
+    }
   },
   "files": {
   },

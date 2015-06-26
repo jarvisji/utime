@@ -19,9 +19,8 @@
   "parse": {
   },
   "routes": {
-    "./middleware/wechat-public-proxy": {
-      "enabled": true,
-      "paths": "/wxproxy"
+    "./middleware/wechat-public": {
+      "path": "/wxproxy"
     }
   },
   "files": {
@@ -33,7 +32,6 @@
     "loopback#urlNotFound": {}
   },
   "final:after": {
-    "errorhandler": {
-    }
+    "errorhandler": {}
   }
 }

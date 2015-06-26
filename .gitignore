@@ -24,3 +24,4 @@ client/assets/ace
 .tmp
 dist
 jshint-report.txt
+server/wechat-config.json

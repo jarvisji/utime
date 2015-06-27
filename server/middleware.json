@@ -20,7 +20,7 @@
   },
   "routes": {
     "./middleware/wechat-public": {
-      "path": "/wxproxy"
+      "paths": "/wxproxy"
     }
   },
   "files": {

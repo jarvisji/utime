@@ -14,30 +14,9 @@
       "type": "string",
       "required": true
     },
-    "name": {
-      "type": "string",
+    "courses": {
+      "type": ["object"],
       "required": true
-    },
-    "teacher": {
-      "type": "string"
-    },
-    "weekDay": {
-      "type": "number",
-      "required": true
-    },
-    "date": {
-      "type": "date"
-    },
-    "startTime": {
-      "type": "date",
-      "required": true
-    },
-    "endTime": {
-      "type": "date",
-      "required": true
-    },
-    "memo": {
-      "type": "string"
     }
   },
   "validations": [],

@@ -1,7 +1,7 @@
 /**
  * Created by Ting on 2015/6/19.
  */
-angular.module('utimeApp', ['lbServices', 'ui.router', 'ui.tree', 'ngCookies'])
+angular.module('utimeApp', ['lbServices', 'ui.router', 'ui.tree', 'ngCookies', 'ngAnimate', 'mgcrea.ngStrap'])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //$locationProvider.html5Mode(true);
     $stateProvider.state('sign-up', {
@@ -53,4 +53,13 @@ angular.module('utimeApp', ['lbServices', 'ui.router', 'ui.tree', 'ngCookies'])
   }])
   .controller('rootCtrl', ['$scope', '$rootScope', '$state', '$log', function ($scope, $rootScope, $state, $log) {
     // init sessionInfo object at the beginning, other pages can call its properties directly needn't worry about undefined error.
+
+    // init menu
+    $scope.menu = [
+      {label: '最新通知', location: '/curriculum'},
+      {label: '今日作业', location: '/curriculum'},
+      {label: '成绩查询', location: '/curriculum'},
+      {label: '课程表', location: '/curriculum'},
+      {label: '通讯录', location: '/curriculum'},
+      {label: '账号绑定', location: '/curriculum'}]
   }]);

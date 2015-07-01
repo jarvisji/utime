@@ -1,10 +1,48 @@
 <header class="page-header">
   <h1>课程表</h1>
 </header>
-<div class="row">
-  <div class="col-xs-12">
-    <div class="alert" role="alert" ng-class="alert.style" ng-if="alert.message">{{alert.message}}</div>
-
-
+<div class="row fc-row-space">
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary btn-block" ng-click="saveCourse">保存</button>
+  </div>
+</div>
+<div class="panel panel-default" ng-repeat="day in courses">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-10">{{day.title}}</div>
+      <div class="col-xs-2">
+        <button type="button" class="btn btn-info btn-xs" ng-click="addCourse($index)">增加课程</button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <form name="curriculumForm" class="form-inline" role="form">
+      <div class="row" ng-repeat="course in day.curriculum">
+        <div class="col-md-12">
+          <div class="form-group" ng-class="{'has-error': curriculumForm.startTime.$invalid}">
+            <label class="control-label">上课时间：</label>
+            <input type="text" class="form-control" size="8" ng-model="course.startTime" name="startTime"
+                   bs-timepicker>
+          </div>
+          <div class="form-group" ng-class="{'has-error': curriculumForm.endTime.$invalid}">
+            <label class="control-label">下课时间：</label>
+            <input type="text" class="form-control" size="8" ng-model="course.endTime" name="endTime" bs-timepicker>
+          </div>
+          <div class="form-group">
+            <label>课程：</label><input type="text" class="form-control" ng-model="course.name">
+          </div>
+          <div class="form-group">
+            <label>教师：</label><input type="text" class="form-control" ng-model="course.teacher">
+          </div>
+          <button type="button" class="btn btn-danger btn-sm" ng-click="deleteCourse(day, $index)">删除</button>
+        </div>
+        <div>&nbsp;</div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row fc-row-space">
+  <div class="col-md-2">
+    <button type="button" class="btn btn-primary btn-block" ng-click="saveCourse">保存</button>
   </div>
 </div>

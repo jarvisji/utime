@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 module.exports = {
   userSchema: new Schema({
-    mobile: String,
+    mobile: {type: String, index: true, unique: true},
     password: String,
     salt: String,
     username: String,
@@ -16,7 +16,9 @@ module.exports = {
       openid: String,
       scope: String,
       unionid: String
-    }
+    },
+    created: {type: Date, default: Date.now},
+    lastModified: {type: Date, default: Date.now}
   }),
   classSchema: new Schema({
     schoolId: String,

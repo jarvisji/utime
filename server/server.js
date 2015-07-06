@@ -24,22 +24,30 @@ var registerRoutes = function () {
     var loginUser = req.body;
     if (typeof(loginUser) == 'object' && loginUser.mobile && loginUser.password) {
       var User = mongoose.model('User', schemas.userSchema);
-      User.findOne({'mobile': loginUser.mobile}, 'password salt', function (err, user) {
+      User.findOne({'mobile': loginUser.mobile}, function (err, user) {
         if (err) {
           console.error(err);
-          res.send(err);
+          return res.status(500).json(jsonResult(err));
         }
-        var hashedPassword = sha512(user.salt + loginUser.password);
-        if (user.password == hashedPassword) {
-          res.send('success');
+        if (user) {
+          var hashedPassword = sha512(user.salt + loginUser.password);
+          if (user.password == hashedPassword) {
+            var returnUser = user.toObject();
+            delete returnUser.password;
+            delete returnUser.salt;
+            res.json(jsonResult(returnUser));
+          } else {
+            res.status(401).json(jsonResult(new Error('Login failed.')));
+          }
         } else {
-          res.send('fail');
+          res.status(401).json(jsonResult(new Error('Login failed.')));
         }
       });
     } else {
       res.send('Invalid request data');
     }
   });
+
   app.get('/users', function (req, res) {
     var User = mongoose.model('User', schemas.userSchema);
     User.find(function (err, users) {
@@ -56,12 +64,37 @@ var registerRoutes = function () {
     user.save(function (err, data) {
       if (err) {
         console.error(err);
-        res.send(err)
+        if (err.code == 11000) // duplicate key
+          return res.status(409).json(jsonResult(err));
+        else
+          return res.status(500).json(jsonResult(err));
       }
       console.log('saved user:', data);
-      res.send(data)
+      var retData = data.toObject();
+      delete retData.password;
+      delete retData.salt;
+      res.status(201).json(jsonResult(retData));
     });
   });
+};
+
+var jsonResult = function (result, mix) {
+  var jsonRet = {};
+  if (result instanceof Error) {
+    jsonRet.error = {message: result.message, type: result.name};
+  } else {
+    jsonRet.data = result;
+    if (result instanceof Array) {
+      jsonRet.count = result.length;
+    }
+  }
+  if (mix && mix instanceof Object) {
+    var keys = Object.keys(mix);
+    for (var key in keys) {
+      jsonRet[key] = mix[key];
+    }
+  }
+  return jsonRet;
 };
 
 var server = app.listen('3000', function () {

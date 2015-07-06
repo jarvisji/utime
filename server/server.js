@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var mongoose = require('mongoose');
+var sha512 = require('crypto-js/sha512');
 var schemas = require('./schemas');
 var app = express();
 
@@ -23,12 +24,13 @@ var registerRoutes = function () {
     var loginUser = req.body;
     if (typeof(loginUser) == 'object' && loginUser.mobile && loginUser.password) {
       var User = mongoose.model('User', schemas.userSchema);
-      User.findOne({'mobile': loginUser.mobile}, 'password', function (err, user) {
+      User.findOne({'mobile': loginUser.mobile}, 'password salt', function (err, user) {
         if (err) {
           console.error(err);
           res.send(err);
         }
-        if (user.password == loginUser.password) {
+        var hashedPassword = sha512(user.salt + loginUser.password);
+        if (user.password == hashedPassword) {
           res.send('success');
         } else {
           res.send('fail');
@@ -45,10 +47,12 @@ var registerRoutes = function () {
       res.json(users);
     });
   });
+
   app.post('/users', function (req, res) {
-    console.log(req.body);
     var User = mongoose.model('User', schemas.userSchema);
     var user = new User(req.body);
+    user.salt = Math.round((new Date().valueOf() * Math.random()));
+    user.password = sha512(user.salt + user.password);
     user.save(function (err, data) {
       if (err) {
         console.error(err);

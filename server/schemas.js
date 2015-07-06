@@ -3,9 +3,10 @@ var Schema = mongoose.Schema;
 
 module.exports = {
   userSchema: new Schema({
-    username: String,
-    password: String,
     mobile: String,
+    password: String,
+    salt: String,
+    username: String,
     linkedTo: String, // teacher/parent/student
     linkedId: String,
     wxCallback: {

@@ -5,7 +5,6 @@
 var mongoose = require('mongoose');
 var sha512 = require('crypto-js/sha512');
 var debug = require('debug')('utime.userCtrl');
-//var error = debug('app:error');
 var schemas = require('../schemas');
 
 module.exports = function () {
@@ -60,8 +59,11 @@ module.exports = function () {
   var getUsers = function (req, res) {
     var User = mongoose.model('User', schemas.userSchema);
     User.find(function (err, users) {
-      if (err) return console.error(err);
-      res.json(users);
+      if (err) {
+        debug('Find user error: ', err);
+        return res.status(500).json(jsonResult(err));
+      }
+      res.json(jsonResult(users));
     });
   };
 
@@ -72,13 +74,13 @@ module.exports = function () {
     user.password = sha512(user.salt + user.password);
     user.save(function (err, data) {
       if (err) {
-        console.error(err);
+        debug('Save user error: ', err);
         if (err.code == 11000) // duplicate key
           return res.status(409).json(jsonResult(err));
         else
           return res.status(500).json(jsonResult(err));
       }
-      console.log('saved user:', data);
+      debug('Save user success: ', err);
       var retData = data.toObject();
       delete retData.password;
       delete retData.salt;

@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var debug = require('debug')('utime.app');
 
+var wechat = require('./middleware/wechat-public');
 var userCtrl = require('./controller/User')();
 var app = express();
 
@@ -20,6 +21,7 @@ db.once('open', function (callback) {
 });
 
 var registerRoutes = function () {
+  app.use('/wxproxy', wechat());
   app.post('/users', userCtrl.createUser);
   app.get('/users', userCtrl.getUsers); // this is just for test.
   app.post('/login', userCtrl.login);

@@ -5,12 +5,13 @@ var request = require('request');
 describe('Test user APIs.', function () {
   var reqOption;
   var mockMobile = new Date().getTime();
+  var newUser = {mobile: mockMobile, password: 'pass'};
+
   beforeEach(function () {
     reqOption = {url: 'http://localhost:3000', json: true};
   });
 
   it('Test register new user', function (done) {
-    var newUser = {mobile: mockMobile, password: 'pass'};
     reqOption.url += '/users';
     reqOption.body = newUser;
     request.post(reqOption, function (error, response, body) {
@@ -24,7 +25,6 @@ describe('Test user APIs.', function () {
   });
 
   it('Test register user with exists mobile phone number should fail', function (done) {
-    var newUser = {mobile: mockMobile, password: 'pass'};
     reqOption.url += '/users';
     reqOption.body = newUser;
     request.post(reqOption, function (error, response, body) {

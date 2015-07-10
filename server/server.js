@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var debug = require('debug')('utime.app');
 
 var wechat = require('./middleware/wechat-public');
-var userCtrl = require('./controller/User')();
+var userCtrl = require('./controller/UserController')();
 var app = express();
 
 app.use(express.static('client'));

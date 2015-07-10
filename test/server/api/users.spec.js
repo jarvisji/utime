@@ -5,7 +5,7 @@ var request = require('request');
 describe('Test user APIs.', function () {
   var reqOption;
   var mockMobile = 'test-' + new Date().getTime();
-  var newUser = {mobile: mockMobile, password: 'pass'};
+  var newUser = {mobile: mockMobile, password: 'pass', wechat: {openid: mockMobile}};
 
   //beforeAll(function(){
   //  // TODO: delete test data for user. Get mongoose from util.
@@ -49,7 +49,7 @@ describe('Test user APIs.', function () {
     });
   });
 
-  it('Test login failed', function(done){
+  it('Test login failed', function (done) {
     var user = {mobile: mockMobile, password: 'wrong pass'};
     reqOption.url += '/login';
     reqOption.body = user;

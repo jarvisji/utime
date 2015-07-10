@@ -19,7 +19,8 @@
     "morgan": "^1.6.0",
     "multer": "^0.1.8",
     "serve-favicon": "^2.0.1",
-    "wechat": "^2.0.1"
+    "wechat": "^2.0.1",
+    "wechat-api": "^1.9.3"
   },
   "optionalDependencies": {
     "loopback-explorer": "^1.1.0"

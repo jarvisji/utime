@@ -2,13 +2,11 @@
  * Created by Ting on 2015/7/2.
  */
 
-var mongoose = require('mongoose');
 var sha512 = require('crypto-js/sha512');
 var debug = require('debug')('utime.userCtrl');
-var schemas = require('../schemas');
+var User = require('../models').User;
 
 module.exports = function () {
-  var User = mongoose.model('User', schemas.userSchema);
   var jsonResult = function (result, mix) {
     var jsonRet = {data: []};
     if (result instanceof Error) {
@@ -57,7 +55,6 @@ module.exports = function () {
   };
 
   var getUsers = function (req, res) {
-    var User = mongoose.model('User', schemas.userSchema);
     User.find(function (err, users) {
       if (err) {
         debug('Find user error: ', err);
@@ -68,7 +65,6 @@ module.exports = function () {
   };
 
   var createUser = function (req, res) {
-    var User = mongoose.model('User', schemas.userSchema);
     var user = new User(req.body);
     user.salt = Math.round((new Date().valueOf() * Math.random()));
     user.password = sha512(user.salt + user.password);

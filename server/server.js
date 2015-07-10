@@ -21,6 +21,10 @@ db.once('open', function (callback) {
 });
 
 var registerRoutes = function () {
+  //app.use('/wxproxy', function(req, res, next){
+  //  debug('Got request data: ', req.body);
+  //  next();
+  //});
   app.use('/wxproxy', wechat());
   app.post('/users', userCtrl.createUser);
   app.get('/users', userCtrl.getUsers); // this is just for test.

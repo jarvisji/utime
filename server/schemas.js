@@ -3,19 +3,24 @@ var Schema = mongoose.Schema;
 
 module.exports = {
   userSchema: new Schema({
-    mobile: {type: String, index: true, unique: true},
+    mobile: {type: String, index: true, unique: true}, // maybe mobile, openid, username.
     password: String,
     salt: String,
-    username: String,
     linkedTo: String, // teacher/parent/student
     linkedId: String,
-    wxCallback: {
-      access_token: String,
-      expires_in: Number,
-      refresh_token: String,
-      openid: String,
-      scope: String,
-      unionid: String
+    wechat: {
+      subscribe: Number,
+      openid: {type: String, index: true, unique: true},
+      nickname: String,
+      sex: Number,
+      language: String,
+      city: String,
+      province: String,
+      country: String,
+      headimgurl: String,
+      subscribe_time: Date,
+      remark: String,
+      groupid: Number
     },
     created: {type: Date, default: Date.now},
     lastModified: {type: Date, default: Date.now}

@@ -7,6 +7,7 @@ var fs = require('fs');
 var debug = require('debug')('utime.wechat');
 
 var User = require('../models').User;
+var resources = require('../resources')();
 var config = JSON.parse(fs.readFileSync('./server/wechat-config.json', {encoding: 'UTF-8'}));
 
 module.exports = function () {
@@ -16,24 +17,43 @@ module.exports = function () {
   //  access_token = token;
   //});
 
+  /**
+   * Get wechat account information and create utime account if not exist.
+   * @param message
+   * @param res
+   */
+  var subscribe = function (message, res) {
+    res.reply(resources.get('event.subscribe.welcome'));
+    api.getUser(message.FromUserName, function (err, result) {
+        if (err) return debug('Get wechat user error: ', err);
+        User.update({"wechat.openid": result.openid}, {
+          mobile: result.openid,
+          wechat: result
+        }, {upsert: true}, function (err, raw) {
+          if (err) return debug('User subscribe error: ', err);
+          debug('User subscribe success: ', raw);
+        });
+      }
+    )
+  };
+
+  var unsubscribe = function (message, res) {
+    res.reply('unsubscribed');
+    User.update({'wechat.openid': message.FromUserName}, {'wechat.subscribe': 0}, function (err, result) {
+      if (err) debug('Update user subscribe status error: ', err);
+      debug('User unsubscribe success: ', result);
+    })
+  };
 
   return wechat(config, function (req, res, next) {
       var message = req.weixin;
+      debug('Receive wechat message: ', message);
       if (message.Event == 'subscribe') {
-        api.getUser(message.FromUserName, function (err, result) {
-            if (err) return debug('Get wechat user error: ', err);
-            User.update({"wechat.openid": result.openid}, {
-              mobile: result.openid,
-              wechat: result
-            }, {upsert: true}, function (err, raw) {
-              if (err) return debug('Save user error: ', err);
-              debug('saved:', raw);
-            });
-          }
-        )
+        subscribe(message, res);
       }
-      debug('wechat: ', message);
-      res.reply(message);
+      if (message.Event == 'unsubscribe') {
+        unsubscribe(message, res);
+      }
     }
   )
 }

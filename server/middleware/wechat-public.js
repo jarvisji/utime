@@ -23,18 +23,33 @@ module.exports = function () {
    * @param res
    */
   var subscribe = function (message, res) {
-    res.reply(resources.get('event.subscribe.welcome'));
+    debug('User subscribe');
     api.getUser(message.FromUserName, function (err, result) {
         if (err) return debug('Get wechat user error: ', err);
-        User.update({"wechat.openid": result.openid}, {
-          mobile: result.openid,
-          wechat: result
-        }, {upsert: true}, function (err, raw) {
-          if (err) return debug('User subscribe error: ', err);
-          debug('User subscribe success: ', raw);
+        User.find({"wechat.openid": result.openid}, function (err, user) {
+          if (err) return debug('Find user in db error: ', err);
+          if (user.length && user.length > 0) {
+            debug('User exist, update.');
+            User.update({"wechat.openid": result.openid}, {
+              wechat: result
+            }, function (err, raw) {
+              if (err) return debug('Update user error: ', err);
+              debug('Update user success: ', raw);
+            });
+          } else {
+            debug('User not exist, create.');
+            User.create({
+              mobile: 'openid_' + result.openid,
+              wechat: result
+            }, function (err, raw) {
+              if (err) return debug('Save user error: ', err);
+              debug('Save user success: ', raw);
+            });
+          }
         });
       }
-    )
+    );
+    res.reply(resources.get('event.subscribe.welcome'));
   };
 
   var unsubscribe = function (message, res) {

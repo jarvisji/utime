@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-module.exports = {
-  userSchema: new Schema({
+module.exports = function () {
+  var userSchema = new Schema({
     mobile: {type: String, index: true, unique: true}, // maybe mobile, openid, username.
     password: String,
     salt: String,
@@ -24,8 +24,12 @@ module.exports = {
     },
     created: {type: Date, default: Date.now},
     lastModified: {type: Date, default: Date.now}
-  }),
-  classSchema: new Schema({
+  });
+  userSchema.pre('update', function () {
+    this.update({}, {$set: {lastModified: new Date()}});
+  });
+
+  var classSchema = new Schema({
     schoolId: String,
     displayName: String,
     grade: Number,
@@ -36,9 +40,14 @@ module.exports = {
       name: String
     },
     registerDate: Date,
-    registerGrade: String
-  }),
-  teacherSchema: new Schema({
+    registerGrade: String,
+    created: {type: Date, default: Date.now},
+    lastModified: {type: Date, default: Date.now}
+  });
+  classSchema.pre('update', function () {
+    this.update({}, {$set: {lastModified: new Date()}});
+  });
+  var teacherSchema = new Schema({
     classIds: [String],
     name: String,
     sex: String,
@@ -46,9 +55,15 @@ module.exports = {
     mobile: String,
     QQ: String,
     email: String,
-    teachStartDate: Date
-  }),
-  studentSchema: new Schema({
+    teachStartDate: Date,
+    created: {type: Date, default: Date.now},
+    lastModified: {type: Date, default: Date.now}
+  });
+  teacherSchema.pre('update', function () {
+    this.update({}, {$set: {lastModified: new Date()}});
+  });
+
+  var studentSchema = new Schema({
     classId: String,
     name: String,
     sex: String,
@@ -60,9 +75,15 @@ module.exports = {
       wxId: String
     }],
     homeAddress: String,
-    joinClassDate: Date
-  }),
-  courseSchema: new Schema({
+    joinClassDate: Date,
+    created: {type: Date, default: Date.now},
+    lastModified: {type: Date, default: Date.now}
+  });
+  studentSchema.pre('update', function () {
+    this.update({}, {$set: {lastModified: new Date()}});
+  });
+
+  var courseSchema = new Schema({
     name: String,
     teacher: {
       teacherId: String,
@@ -75,6 +96,19 @@ module.exports = {
     date: Date,
     memo: String,
     startTime: Date,
-    endTime: Date
-  })
+    endTime: Date,
+    created: {type: Date, default: Date.now},
+    lastModified: {type: Date, default: Date.now}
+  });
+  courseSchema.pre('update', function () {
+    this.update({}, {$set: {lastModified: new Date()}});
+  });
+
+  return {
+    userSchema: userSchema,
+    classSchema: classSchema,
+    teacherSchema: teacherSchema,
+    studentSchema: studentSchema,
+    courseSchema: courseSchema
+  }
 };

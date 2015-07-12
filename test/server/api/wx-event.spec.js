@@ -19,6 +19,8 @@ describe('Test events handle from wechat server.', function () {
   });
 
   it('Test user subscribe.', function (done) {
+    console.log('subscribe start');
+    currentCaseDone = false;
     reqOption.body = '<xml>';
     reqOption.body += '<ToUserName><![CDATA[gh_6a821daa4090]]></ToUserName>';
     reqOption.body += '<FromUserName><![CDATA[' + userOpenId + ']]></FromUserName>';
@@ -34,11 +36,13 @@ describe('Test events handle from wechat server.', function () {
         expect(user.created).toBeDefined();
         expect(user.lastModified).toBeDefined();
         expect(user.wechat.subscribe).toEqual(1);
+        console.log('subscribe end');
       });
     })
   });
 
   it('Test user unsubscribe.', function (done) {
+    console.log('unsubscribe start');
     reqOption.body = '<xml>';
     reqOption.body += '<ToUserName><![CDATA[gh_6a821daa4090]]></ToUserName>';
     reqOption.body += '<FromUserName><![CDATA[' + userOpenId + ']]></FromUserName>';
@@ -55,6 +59,7 @@ describe('Test events handle from wechat server.', function () {
         expect(user.lastModified).toBeDefined();
         expect(user.created).not.toEqual(user.lastModified);
         expect(user.wechat.subscribe).toEqual(0);
+        console.log('unsubscribe end');
       });
     })
   });

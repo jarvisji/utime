@@ -13,10 +13,6 @@ var conf = require('../conf');
 
 module.exports = function () {
   var api = new wechatApi(conf.wechat.appid, conf.wechat.appsecret);
-  //var access_token;
-  //api.getLatestToken(function (err, token) {
-  //  access_token = token;
-  //});
 
   /**
    * Get wechat account information and create utime account if not exist.
@@ -26,38 +22,40 @@ module.exports = function () {
   var subscribe = function (message, res) {
     debug('User subscribe');
     api.getUser(message.FromUserName, function (err, result) {
-        if (err) return debug('Get wechat user error: ', err);
+        if (err) return debug('Subscribe: Get wechat user error: ', err);
         User.find({"wechat.openid": result.openid}, function (err, user) {
-          if (err) return debug('Find user in db error: ', err);
+          if (err) return debug('Subscribe: Find user in db error: ', err);
           if (user.length && user.length > 0) {
-            debug('User exist, update.');
+            debug('Subscribe: User exist, update.');
             User.update({"wechat.openid": result.openid}, {
               wechat: result
             }, function (err, raw) {
-              if (err) return debug('Update user error: ', err);
-              debug('Update user success: ', raw);
+              if (err) return debug('Subscribe: Update user error: ', err);
+              debug('Subscribe: Update user success: ', raw);
+              res.reply(resources.get('event.subscribe.welcome'));
             });
           } else {
-            debug('User not exist, create.');
+            debug('Subscribe: User not exist, create.');
             User.create({
               mobile: 'openid_' + result.openid,
               wechat: result
             }, function (err, raw) {
-              if (err) return debug('Save user error: ', err);
-              debug('Save user success: ', raw);
+              if (err) return debug('Subscribe: Save user error: ', err);
+              debug('Subscribe: Save user success: ', raw);
+              res.reply(resources.get('event.subscribe.welcome'));
             });
           }
         });
       }
     );
-    res.reply(resources.get('event.subscribe.welcome'));
   };
 
   var unsubscribe = function (message, res) {
-    res.reply('unsubscribed');
-    User.update({'wechat.openid': message.FromUserName}, {'$set': {wechat: {subscribe: 0}}}, function (err, result) {
-      if (err) debug('Update user subscribe status error: ', err);
-      debug('User unsubscribe success: ', result);
+    debug('User unsubscribe');
+    User.update({'wechat.openid': message.FromUserName}, {'wechat.subscribe': 0} , function (err, result) {
+      if (err) debug('Unsubscribe: Update user subscribe status error: ', err);
+      debug('Unsubscribe: User unsubscribe success: ', result);
+      res.reply('unsubscribed');
     })
   };
 

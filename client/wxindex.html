@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html ng-app="utimeApp" ng-controller="rootCtrl">
+<html ng-app="utimeWxApp" ng-controller="rootCtrl">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
   <base href="/">
-  <title fc-i18n="光荫网"></title>
+  <title>光荫网</title>
 
   <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
   <!-- build:css assets/css/ace.min.css -->
   <!--<link href="assets/css/ace-fonts.css" rel="stylesheet">-->
   <!--<link href="assets/css/ace.css" rel="stylesheet">-->
   <!-- endbuild -->
+
   <!-- build:css assets/css/app.min.css -->
-  <link href="vendor/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet">
   <link href="assets/css/styles.css" rel="stylesheet">
   <!-- endbuild -->
 
@@ -26,37 +27,23 @@
   <script src="http://cdn.bootcss.com/angular-strap/2.2.4/angular-strap.min.js"></script>
   <script src="http://cdn.bootcss.com/angular-strap/2.2.4/angular-strap.tpl.min.js"></script>
   <!--<script src="http://cdn.bootcss.com/modernizr/2.8.3/modernizr.min.js"></script>-->
+
   <!-- build:js assets/js/3rd.min.js -->
   <script src="vendor/angular-resource/angular-resource.js"></script>
   <script src="vendor/angular-cookies/angular-cookies.js"></script>
   <script src="vendor/angular-animate/angular-animate.js"></script>
-  <script src="vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
   <!-- endbuild -->
+
   <!-- build:js assets/js/app.min.js -->
-  <script src="app/app.js"></script>
-  <script src="app/curriculum/curriculum.js"></script>
+  <script src="wxapp/app.js"></script>
+  <script src="wxapp/activate/activate.js"></script>
   <!-- endbuild -->
 </head>
-<body>
-<header class="navbar" role="banner">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">光荫网</a>
-    </div>
-    <div class="fc-navbar-action">
-      <button class="btn btn-yellow btn-sm" ng-click="logout()" ng-show="sessionInfo.isLogin">Sign out</button>
-    </div>
-  </div>
-</header>
 
+<body>
 <div class="container-fluid">
   <div class="row">
-    <nav class="hidden-xs col-sm-2">
-      <ul class="nav nav-pills nav-stacked">
-        <li ng-repeat="item in menu"><a ui-sref="{{item.location}}">{{item.label}}</a></li>
-      </ul>
-    </nav>
-    <div class="col-xs-12 col-sm-10">
+    <div class="col-xs-12">
       <div ui-view class="fc-page-content"></div>
     </div>
   </div>

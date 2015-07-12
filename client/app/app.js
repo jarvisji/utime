@@ -1,7 +1,7 @@
 /**
  * Created by Ting on 2015/6/19.
  */
-angular.module('utimeApp', ['lbServices', 'ui.router', 'ui.tree', 'ngCookies', 'ngAnimate', 'mgcrea.ngStrap'])
+angular.module('utimeApp', ['ui.router', 'ui.tree', 'ngCookies', 'ngAnimate', 'mgcrea.ngStrap'])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
     //$locationProvider.html5Mode(true);
     $stateProvider.state('sign-up', {

@@ -8,10 +8,11 @@ var debug = require('debug')('utime.wechat');
 
 var User = require('../models').User;
 var resources = require('../resources')();
-var config = JSON.parse(fs.readFileSync('./server/wechat-config.json', {encoding: 'UTF-8'}));
+var conf = require('../conf');
+//var config = JSON.parse(fs.readFileSync('./server/wechat-config.json', {encoding: 'UTF-8'}));
 
 module.exports = function () {
-  var api = new wechatApi(config.appid, config.appsecret);
+  var api = new wechatApi(conf.wechat.appid, conf.wechat.appsecret);
   //var access_token;
   //api.getLatestToken(function (err, token) {
   //  access_token = token;
@@ -54,13 +55,13 @@ module.exports = function () {
 
   var unsubscribe = function (message, res) {
     res.reply('unsubscribed');
-    User.update({'wechat.openid': message.FromUserName}, {'wechat.subscribe': 0}, function (err, result) {
+    User.update({'wechat.openid': message.FromUserName}, {'$set': {wechat: {subscribe: 0}}}, function (err, result) {
       if (err) debug('Update user subscribe status error: ', err);
       debug('User unsubscribe success: ', result);
     })
   };
 
-  return wechat(config, function (req, res, next) {
+  return wechat(conf.wechat, function (req, res, next) {
       var message = req.weixin;
       debug('Receive wechat message: ', message);
       if (message.Event == 'subscribe') {

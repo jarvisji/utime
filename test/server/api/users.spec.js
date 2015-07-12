@@ -2,6 +2,8 @@
  * Test User APIs.
  */
 var request = require('request');
+var conf = require('../../../server/conf');
+
 describe('Test user APIs.', function () {
   var reqOption;
   var mockMobile = 'test-' + new Date().getTime();
@@ -11,7 +13,7 @@ describe('Test user APIs.', function () {
   //  // TODO: delete test data for user. Get mongoose from util.
   //});
   beforeEach(function () {
-    reqOption = {url: 'http://localhost:3001', json: true};
+    reqOption = {url: conf.utimeServerUrl, json: true};
   });
 
   it('Test register new user', function (done) {
@@ -26,7 +28,6 @@ describe('Test user APIs.', function () {
       expect(body.data.password).toBeUndefined();
     })
   });
-
 
   it('Test register user with exists mobile phone number should fail', function (done) {
     reqOption.url += '/users';

@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var debug = require('debug')('utime.app');
 
+var conf = require('./conf');
 var wechatPublic = require('./middleware/wechat-public');
 var userCtrl = require('./controller/UserController')();
 var app = express();
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // connect to MongoDB
-mongoose.connect('mongodb://localhost:27000/utime');
+mongoose.connect(conf.mongoDbUrl);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {

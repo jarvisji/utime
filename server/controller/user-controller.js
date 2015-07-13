@@ -4,36 +4,17 @@
 
 var sha512 = require('crypto-js/sha512');
 var debug = require('debug')('utime.userCtrl');
+var utils = require('../middleware/utils');
 var User = require('../models').User;
 
 module.exports = function () {
-  var jsonResult = function (result, mix) {
-    var jsonRet = {data: []};
-    if (result instanceof Error) {
-      jsonRet.error = result;
-    } else if (typeof(result) == 'string') {
-      jsonRet.message = result;
-    } else {
-      jsonRet.data = result;
-      if (result instanceof Array) {
-        jsonRet.count = result.length;
-      }
-    }
-    if (mix && mix instanceof Object) {
-      var keys = Object.keys(mix);
-      for (var key in keys) {
-        jsonRet[key] = mix[key];
-      }
-    }
-    return jsonRet;
-  };
   var login = function (req, res) {
     var loginUser = req.body;
     if (typeof(loginUser) == 'object' && loginUser.mobile && loginUser.password) {
       User.findOne({'mobile': loginUser.mobile}, function (err, user) {
         if (err) {
           debug('Find user error: ', err);
-          return res.status(500).json(jsonResult(err));
+          return res.status(500).json(utils.jsonResult(err));
         }
         if (user) {
           var hashedPassword = sha512(user.salt + loginUser.password);
@@ -41,16 +22,16 @@ module.exports = function () {
             var returnUser = user.toObject();
             delete returnUser.password;
             delete returnUser.salt;
-            res.json(jsonResult(returnUser));
+            res.json(utils.jsonResult(returnUser));
           } else {
-            res.status(401).json(jsonResult(new Error('Login failed.')));
+            res.status(401).json(utils.jsonResult(new Error('Login failed.')));
           }
         } else {
-          res.status(401).json(jsonResult(new Error('Login failed.')));
+          res.status(401).json(utils.jsonResult(new Error('Login failed.')));
         }
       });
     } else {
-      res.status(400).json(jsonResult('Invalid request data'));
+      res.status(400).json(utils.jsonResult('Invalid request data'));
     }
   };
 
@@ -58,9 +39,9 @@ module.exports = function () {
     User.find(function (err, users) {
       if (err) {
         debug('Find user error: ', err);
-        return res.status(500).json(jsonResult(err));
+        return res.status(500).json(utils.jsonResult(err));
       }
-      res.json(jsonResult(users));
+      res.json(utils.jsonResult(users));
     });
   };
 
@@ -72,15 +53,15 @@ module.exports = function () {
       if (err) {
         debug('Save user error: ', err);
         if (err.code == 11000) // duplicate key
-          return res.status(409).json(jsonResult(err));
+          return res.status(409).json(utils.jsonResult(err));
         else
-          return res.status(500).json(jsonResult(err));
+          return res.status(500).json(utils.jsonResult(err));
       }
       debug('Save user success: ', err);
       var retData = data.toObject();
       delete retData.password;
       delete retData.salt;
-      res.status(201).json(jsonResult(retData));
+      res.status(201).json(utils.jsonResult(retData));
     });
   };
 

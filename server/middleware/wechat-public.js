@@ -61,6 +61,7 @@ module.exports = function () {
 
   return wechat(conf.wechat, function (req, res, next) {
       var message = req.weixin;
+      debug(req.url);
       debug('Receive wechat message: ', message);
       if (message.Event == 'subscribe') {
         subscribe(message, res);

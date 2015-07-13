@@ -6,6 +6,7 @@ var debug = require('debug')('utime.app');
 var conf = require('./conf');
 var wechatPublic = require('./middleware/wechat-public');
 var userCtrl = require('./controller/user-controller')();
+var wechatCtrl = require('./controller/wechat-controller')();
 var app = express();
 
 app.use(express.static('client'));
@@ -27,6 +28,7 @@ var registerRoutes = function () {
   //  next();
   //});
   app.use('/wxproxy', wechatPublic());
+  app.post('/wechat/menu', wechatCtrl.createMenu);
   app.post('/users', userCtrl.createUser);
   app.get('/users', userCtrl.getUsers); // this is just for test.
   app.post('/login', userCtrl.login);

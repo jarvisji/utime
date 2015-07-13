@@ -13,7 +13,7 @@ describe('Test user APIs.', function () {
   //  // TODO: delete test data for user. Get mongoose from util.
   //});
   beforeEach(function () {
-    reqOption = {url: conf.utimeServerUrl, json: true};
+    reqOption = {url: conf.test.utimeServerUrl, json: true};
   });
 
   it('Test register new user', function (done) {

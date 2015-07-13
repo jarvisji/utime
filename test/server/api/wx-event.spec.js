@@ -15,7 +15,7 @@ describe('Test events handle from wechat server.', function () {
   //  // TODO: delete test data for user. Get mongoose from util.
   //});
   beforeEach(function () {
-    reqOption = {url: conf.wxProxyUrl};
+    reqOption = {url: conf.test.wxProxyUrl};
   });
 
   it('Test user subscribe.', function (done) {
